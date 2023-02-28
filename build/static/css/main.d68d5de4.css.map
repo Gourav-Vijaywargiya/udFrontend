@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.d68d5de4.css","mappings":"AAAA,EACE,QAAS,CACT,SACF,CAEA,KACE,kCACF","sources":["App.css"],"sourcesContent":["*{\n  margin: 0;\n  padding: 0;\n}\n\nbody{\n  background-color: whitesmoke !important;\n}\n\n"],"names":[],"sourceRoot":""}
