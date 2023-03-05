@@ -5,7 +5,7 @@ export interface user {
   firstName: string;
   lastName: string;
   email: string;
-  Mobile: number;
+  Mobile: string;
   DateofBirth: string;
   Gender: string;
   lastlogin: string;
@@ -27,7 +27,7 @@ export interface profilepic{
   firstName: string;
   lastName: string;
   email: string;
-  Mobile: number;
+  Mobile: string;
   DateofBirth: string;
   Gender: string;
   lastlogin: string;
@@ -59,7 +59,7 @@ export interface updateFormData {
   lastName: string;
   email: string;
   Mobile: string;
-  DateofBirth: string;
+  DateofBirth: string ;
   Gender: string;
   image: string | File;
   aboutme: string;
@@ -85,4 +85,14 @@ export interface googleOauthUser{
     prompt: string,
     scope: string,
     token_type: string
+}
+
+export interface iAlert {
+  msg: string,
+  type: string
+}
+
+export interface iProps {
+  alert : iAlert | null,
+  showAlert: (message: string, type: string) => void;
 }
