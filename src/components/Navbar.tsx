@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { googleLogout } from "@react-oauth/google";
-import { userProfile, profilepic } from "../Interface/common";
+import { userProfile, profilepic, user } from "../Interface/common";
 import { useNavigate } from "react-router";
 import { Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 const Navbar = () => {
   const [profilepic, setProfilePic] = useState<string>("");
@@ -11,6 +12,7 @@ const Navbar = () => {
     localStorage.getItem("profile") as string
   );
   const navigate = useNavigate();
+  const [data, setData] = useState<user | null>();
 
   // Function to get image of logged in user
   const getData = async () => {
@@ -25,6 +27,7 @@ const Navbar = () => {
     );
 
     let temp: profilepic = await response.json();
+    setData(temp);
     setProfilePic(temp.image);
   };
 
@@ -48,19 +51,13 @@ const Navbar = () => {
       >
         <div className="container-fluid">
           <span className="navbar-brand">User Directory</span>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
+          
           <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav me-auto"></ul>
+            <ul className="navbar-nav me-auto">
+              
+            </ul>
+            <ul className="navbar-nav "><h6 className="nav-link" ><b>Login Time : {data && data.lastlogin.slice(0, 24)}</b></h6></ul>
+              
             <ul className="navbar-nav">
               <li className="nav-item dropdown">
                 <Dropdown>

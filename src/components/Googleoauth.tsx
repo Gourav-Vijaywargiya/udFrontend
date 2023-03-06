@@ -125,9 +125,9 @@ const Googleoauth = (props :iProps) => {
       
       <br />
       <br />
-      <p style={{ marginLeft: "50px", marginTop: "45px" }}>
+      <div style={{ marginLeft: "50px", marginTop: "45px" }}>
         <h1>Welcome to User Directory</h1>
-      </p>
+      </div>
       <Button
         variant="danger"
         onClick={clickHandler

@@ -55,6 +55,13 @@ const Fetchdata = (props : iProps) => {
     );
 
     let temp: datatype = await response.json();
+    if(temp.User.length > 0)
+    {
+      props.showAlert("User found", "info");
+    }
+    else{
+      props.showAlert("User not found", "info");
+    }
     setData(temp.User);
     setTotalResult(Number(temp.totalResults));
     setLoading(true);
@@ -153,7 +160,6 @@ const Fetchdata = (props : iProps) => {
                     <th scope="col">Gender </th>
                     <th scope="col">Date of Birth </th>
                     <th scope="col">About Me </th>
-                    <th scope="col">Last login time</th>
                   </tr>
                 </thead>
 
@@ -184,7 +190,6 @@ const Fetchdata = (props : iProps) => {
                         <td>{item.Gender}</td>
                         <td>{item.DateofBirth.slice(0, 10)}</td>
                         <td>{item.aboutme}</td>
-                        <td>{item.lastlogin.slice(0, 24)}</td>
                       </tr>
                     ))}
                 </tbody>

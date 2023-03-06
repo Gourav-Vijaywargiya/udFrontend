@@ -4,6 +4,7 @@ import { userProfile, updateFormData, iProps } from "../Interface/common";
 import Alert from "./Alert";
 import Spinner from "./Spinner";
 import UpdateFormNavbar from "./UpdateFormNavbar";
+import moment from "moment";
 
 const Updateform = (props: iProps) => {
   const userProfile: userProfile = JSON.parse(
@@ -54,6 +55,13 @@ const Updateform = (props: iProps) => {
     });
   };
 
+  const onChangegender = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+    setData({
+      ...data,
+      [(e.target as HTMLSelectElement).name]: e.target.value,
+    });
+  };
+
   const onChangeMobile = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData({
       ...data,
@@ -96,8 +104,6 @@ const Updateform = (props: iProps) => {
       "content-type": "multipart/form-data;",
     };
 
-    console.log(formData);
-
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/data/updatedata`,
       {
@@ -107,7 +113,7 @@ const Updateform = (props: iProps) => {
     );
 
     Navigate("/home");
-    props.showAlert("Profile Updated Successfully", "Success");
+    props.showAlert("Profile Updated Successfully", "success");
     return response.json();
   };
 
@@ -222,15 +228,16 @@ const Updateform = (props: iProps) => {
                         Gender<span className="text-danger">*</span>
                       </b>
                     </label>
-                    <input
-                      type="text"
+                    <select
                       name="Gender"
                       className="form-control"
-                      placeholder="Gender"
-                      onChange={onChange}
                       value={data.Gender}
+                      onChange={onChangegender}
                       required
-                    />
+                    >
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
                   </div>
                   <div className="col">
                     <label htmlFor="DateofBirth">
@@ -243,6 +250,7 @@ const Updateform = (props: iProps) => {
                       name="DateofBirth"
                       className="form-control"
                       placeholder="Date of Birth"
+                      max={moment().format("YYYY-MM-DD")}
                       onChange={onChange}
                       value={data.DateofBirth}
                       // value={new Date(Date.parse(data.DateofBirth)).toLocaleDateString()}
@@ -265,6 +273,7 @@ const Updateform = (props: iProps) => {
                       value={data.aboutme}
                       onChange={onChangeAbout}
                       required
+                      maxLength={300}
                     ></textarea>
                   </div>
                   <div className="col">
@@ -273,12 +282,28 @@ const Updateform = (props: iProps) => {
                         <b>Profile Picture</b>
                       </label>{" "}
                     </div>
-                    <input
-                      type="file"
-                      name="image"
-                      className="form-control-file"
-                      onChange={handleImageChange}
-                    />
+                    <div style ={{marginTop :"-25px"}}>
+                      <input
+                        type="file"
+                        name="image"
+                        className="form-control-file"
+                        onChange={handleImageChange}
+                      />
+                      {typeof data.image === "string" &&
+                      data.image.includes("google") ? (
+                        <img
+                          style={{ width: "100px", height: "80px" }}
+                          src={data.image as string}
+                          alt="ProfilePic"
+                        />
+                      ) : (
+                        <img
+                          style={{ width: "100px", height: "80px" }}
+                          src={`${process.env.REACT_APP_API_URL}/uploads/${data.image}`}
+                          alt="ProfilePic"
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
                 <button className="btn btn-primary my-3" type="submit">

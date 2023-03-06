@@ -6,7 +6,7 @@ import axios from "axios";
 import moment from "moment";
 import Alert from "./Alert";
 
-const Registration = (props : iProps) => {
+const Registration = (props: iProps) => {
   const [profile, setProfile] = useState<userProfile | null>(
     JSON.parse(localStorage.getItem("profile") as string)
   );
@@ -16,7 +16,6 @@ const Registration = (props : iProps) => {
   const [show, setShow] = useState<boolean>(false);
   const [aboutme, setAboutMe] = useState<string>("");
   const navigate = useNavigate();
-
 
   const logOut = () => {
     googleLogout();
@@ -45,7 +44,7 @@ const Registration = (props : iProps) => {
     );
     localStorage.setItem("profile", JSON.stringify(userDetails));
     navigate("/home");
-    props.showAlert("Registerd Successfully","Success");
+    props.showAlert("Registerd Successfully", "Success");
   };
 
   return (
@@ -68,7 +67,9 @@ const Registration = (props : iProps) => {
       <form style={{ marginLeft: "20px" }} onSubmit={handleSubmit}>
         <h3>Enter Required Details</h3>
         <label style={{ marginRight: "5px" }} htmlFor="mobile">
-          <b>Mobile No:<span className="text-danger">*</span></b>
+          <b>
+            Mobile No:<span className="text-danger">*</span>
+          </b>
         </label>
         <input
           type="tel"
@@ -83,12 +84,15 @@ const Registration = (props : iProps) => {
         />
 
         <label style={{ marginLeft: "10px", marginRight: "5px" }} htmlFor="dob">
-          <b>Date of Birth:<span className="text-danger">*</span></b>
+          <b>
+            Date of Birth:<span className="text-danger">*</span>
+          </b>
         </label>
         <input
           type="date"
           name="dob"
           value={dob}
+          max={moment().format("YYYY-MM-DD")}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setDOB(e.target.value)
           }
@@ -99,10 +103,11 @@ const Registration = (props : iProps) => {
           style={{ marginLeft: "10px", marginRight: "5px" }}
           htmlFor="gender"
         >
-          {" "}
-          <b>Gender:<span className="text-danger">*</span></b>
+          <b>
+            Gender:<span className="text-danger">*</span>
+          </b>
         </label>
-        <input
+        {/* <input
           type="gender"
           name="gender"
           value={gender}
@@ -110,21 +115,36 @@ const Registration = (props : iProps) => {
             setGender((e.target as HTMLInputElement).value)
           }
           required
-        />
+        /> */}
+        <select
+          name="gender"
+          value={gender}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            setGender(e.target.value)
+          }
+          required
+        >
+          <option value="">--Select Gender--</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
 
         <label
           style={{ marginLeft: "10px", marginRight: "5px" }}
           htmlFor="aboutme"
         >
-          <b>About Me:<span className="text-danger">*</span></b>
+          <b>
+            About Me:<span className="text-danger">*</span>
+          </b>
         </label>
         <textarea
           name="aboutme"
-          style ={{marginBottom: "-3px",height:"28px"}}
+          style={{ marginBottom: "-3px", height: "28px" }}
           value={aboutme}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
             setAboutMe((e.target as HTMLTextAreaElement).value)
           }
+          maxLength ={300}
           required
         ></textarea>
 
