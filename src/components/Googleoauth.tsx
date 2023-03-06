@@ -40,9 +40,11 @@ const Googleoauth = (props :iProps) => {
         if (res.data.status) {
           updateloginTime(profile!.email);
           props.showAlert("Login Successful", "success");
+          <Spinner/>
           navigate("/home");
           setShow(true);
         } else {
+          <Spinner/>
           navigate("/registration");
           setShow(false);
         }
@@ -97,6 +99,7 @@ const Googleoauth = (props :iProps) => {
           console.log("error", error);
           console.log(error);
         });
+        <Spinner/>
     }
     setLoading(true);
   }, [user]);

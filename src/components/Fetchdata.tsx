@@ -117,12 +117,12 @@ const Fetchdata = (props : iProps) => {
                   setSearchTitle(e.target.value);
                 }}
                 onKeyDown = { handleKeypress}
-                style={{ width: "1100px", height: "50px", padding: "15px" }}
+                style={{ width: "83%", height: "50px", padding: "15px" }}
               />
               <button
                 className="btn btn-primary "
                 type="submit"
-                style={{ width: "100px", height: "50px" }}
+                style={{ width: "8%", height: "50px" }}
                 onClick={getSearchData}
                
               >
@@ -131,7 +131,7 @@ const Fetchdata = (props : iProps) => {
               <button
                 className="btn btn-danger "
                 type="submit"
-                style={{ width: "100px", height: "50px" }}
+                style={{ width: "8%", height: "50px" }}
                 onClick={onClickReset}
               >
                 Reset
