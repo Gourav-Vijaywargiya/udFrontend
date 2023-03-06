@@ -100,6 +100,7 @@ const Googleoauth = (props :iProps) => {
           console.log(error);
         });
         <Spinner/>
+        
     }
     setLoading(true);
   }, [user]);
