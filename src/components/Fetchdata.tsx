@@ -94,8 +94,7 @@ const Fetchdata = (props : iProps) => {
   useEffect(() => {
       setLoading(false);
       getData();
-      setPage(searchPage);
-      
+      setPage(searchPage);  
   }, []);
 
 
