@@ -27,24 +27,21 @@ const Googleoauth = (props :iProps) => {
   });
 
   // Check if the user is already registered or not
-  const authenticate = () => {
-    if(loading)
-    {
-      <Spinner/>
-    }
+  const authenticate = async() => {
+    
+    
     axios
       .post(`${process.env.REACT_APP_API_URL}/data/checkuser`, {
         email: profile && profile.email,
       })
       .then((res) => {
         if (res.data.status) {
+          setLoading(false);
           updateloginTime(profile!.email);
           props.showAlert("Login Successful", "success");
-          <Spinner/>
           navigate("/home");
           setShow(true);
         } else {
-          <Spinner/>
           navigate("/registration");
           setShow(false);
         }
@@ -94,16 +91,19 @@ const Googleoauth = (props :iProps) => {
         })
         .then((res) => {
           setProfile(res.data);
+          
         })
         .catch((error) => {
           console.log("error", error);
           console.log(error);
         });
-        <Spinner/>
-        
     }
-    setLoading(true);
   }, [user]);
+
+  const clickHandler = () => {
+    setLoading(true);
+    login()
+  }
 
   
 
@@ -111,7 +111,8 @@ const Googleoauth = (props :iProps) => {
     
     <>
     <Alert showAlert = {props.showAlert} alert ={props.alert}/>
-    <div
+    {loading && <Spinner/>}
+    {!loading && <div
       className="container"
       style={{
         background: "linear-gradient(to bottom, #FFC300, #FF5733), #F44336",
@@ -129,7 +130,8 @@ const Googleoauth = (props :iProps) => {
       </p>
       <Button
         variant="danger"
-        onClick={() => login()}
+        onClick={clickHandler
+        }
         style={{ marginLeft: "185px", marginTop: "80px" }}
       >
         <div className="d-flex justify-content-between align-items-center">
@@ -137,7 +139,7 @@ const Googleoauth = (props :iProps) => {
           <span>Sign in with Google</span>
         </div>
       </Button>
-    </div>
+    </div>}
     </>
     
 
