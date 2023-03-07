@@ -86,6 +86,7 @@ const Updateform = (props: iProps) => {
   const submitData = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
+    setLoading(true);
     e.preventDefault();
 
     let newData = { ...data, email: userProfile.email };
@@ -106,7 +107,7 @@ const Updateform = (props: iProps) => {
       "content-type": "multipart/form-data;",
     };
 
-    setLoading(true);
+    
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/data/updatedata`,
       {
