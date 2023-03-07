@@ -107,15 +107,7 @@ const Registration = (props: iProps) => {
             Gender:<span className="text-danger">*</span>
           </b>
         </label>
-        {/* <input
-          type="gender"
-          name="gender"
-          value={gender}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setGender((e.target as HTMLInputElement).value)
-          }
-          required
-        /> */}
+        
         <select
           name="gender"
           value={gender}

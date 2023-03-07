@@ -17,14 +17,16 @@ const Updateform = (props: iProps) => {
     lastName: "userProfile.family_name",
     email: "userProfile.email",
     Mobile: "userProfile.mobile",
-    DateofBirth: "userProfile.DateofBirth",
+    DateofBirth: "userProfile.date_of_birth",
     Gender: "userProfile.Gender",
     image: "userProfile.image",
     aboutme: "userProfile.aboutme",
   });
   const [loading, setLoading] = useState<boolean>(false);
+
   // Function to get the data of logged in user
   const getData = async (email: string): Promise<void> => {
+    setLoading(false);
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/data/fetchdata/${email}`,
       {
@@ -36,8 +38,8 @@ const Updateform = (props: iProps) => {
     );
 
     let temp = await response.json();
-    setData(temp);
     setLoading(true);
+    setData(temp);
   };
 
   // Fucntion to handle the change the data of logged in user
@@ -104,6 +106,7 @@ const Updateform = (props: iProps) => {
       "content-type": "multipart/form-data;",
     };
 
+    setLoading(true);
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/data/updatedata`,
       {
@@ -111,7 +114,7 @@ const Updateform = (props: iProps) => {
         body: formData,
       }
     );
-
+      setLoading(false);
     Navigate("/home");
     props.showAlert("Profile Updated Successfully", "success");
     return response.json();
@@ -130,6 +133,17 @@ const Updateform = (props: iProps) => {
       }
     }
   }, []);
+
+  // console.log("dob", data.DateofBirth);
+
+  // const originalString = data.DateofBirth;
+  
+  // // Parse string into date object
+  // const dateObject = new Date(originalString);
+  
+  // // Format date object into desired string format
+  // const dob = dateObject.toLocaleDateString("en-GB");
+  // console.log("dateof birth is ",dob);
 
   return (
     <>
@@ -253,7 +267,6 @@ const Updateform = (props: iProps) => {
                       max={moment().format("YYYY-MM-DD")}
                       onChange={onChange}
                       value={data.DateofBirth}
-                      // value={new Date(Date.parse(data.DateofBirth)).toLocaleDateString()}
                     />
                   </div>
                 </div>
@@ -317,7 +330,7 @@ const Updateform = (props: iProps) => {
         </>
       ) : (
         <>
-          {props.showAlert("Please Login before continue", "warning")}
+          {props.showAlert("Please Login to continue", "warning")}
           {Navigate("/")}
         </>
       )}

@@ -24,6 +24,7 @@ const Fetchdata = (props : iProps) => {
   // Funtion to get complete data
   const getData = async () => {
     setPage(searchPage);
+    setLoading(false);
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/data/fetchdata`,
       {
@@ -35,15 +36,17 @@ const Fetchdata = (props : iProps) => {
     );
 
     let temp: datatype = await response.json();
+    setLoading(true);
     setData(temp.User);
     setTotalResult(Number(temp.totalResults));
-    setLoading(true);
+    
   };
 
   // Function to get searched data
   const getSearchData = async () => {
     setSearchPage(page);
     setPage(1);
+    setLoading(false);
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/data/fetchsearchdata/${searchTitle}`,
       {
@@ -62,9 +65,9 @@ const Fetchdata = (props : iProps) => {
     else{
       props.showAlert("User not found", "info");
     }
+    setLoading(true);
     setData(temp.User);
     setTotalResult(Number(temp.totalResults));
-    setLoading(true);
   };
 
   const handleKeypress =(e: React.KeyboardEvent<HTMLInputElement>) : void => {
@@ -99,7 +102,7 @@ const Fetchdata = (props : iProps) => {
 
   // Use effect to fetch the data initially and every time when searchtitle is empty
   useEffect(() => {
-      setLoading(false);
+      // setLoading(false);
       getData();
       setPage(searchPage);  
   }, []);
@@ -229,7 +232,7 @@ const Fetchdata = (props : iProps) => {
         </>
         ) :(
           <>
-          {props.showAlert("Please Login before continue", "warning")}
+          {props.showAlert("Please Login to continue", "warning")}
           {navigate("/")}
           </>
         )
