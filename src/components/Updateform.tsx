@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { IUserProfile, IUpdateFormData, iProps } from '../Interface/common';
-import Alert from './Alert';
 import Spinner from './Spinner';
 import UpdateFormNavbar from './UpdateFormNavbar';
 import moment from 'moment';
@@ -12,15 +11,15 @@ const Updateform = (props: iProps) => {
   );
   const Navigate = useNavigate();
   const [data, setData] = useState<IUpdateFormData>({
-    name: 'userProfile.name',
-    firstName: 'userProfile.given_name',
-    lastName: 'userProfile.family_name',
-    email: 'userProfile.email',
-    Mobile: 'userProfile.mobile',
-    DateofBirth: 'userProfile.date_of_birth',
-    Gender: 'userProfile.Gender',
-    image: 'userProfile.image',
-    aboutme: 'userProfile.aboutme',
+    name: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    Mobile: '',
+    DateofBirth: '',
+    Gender: '',
+    image: '',
+    aboutme: ''
   });
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -134,17 +133,6 @@ const Updateform = (props: iProps) => {
     }
   }, []);
 
-  // console.log('dob', data.DateofBirth);
-
-  // const originalString = data.DateofBirth;
-
-  // // Parse string into date object
-  // const dateObject = new Date(originalString);
-
-  // // Format date object into desired string format
-  // const dob = dateObject.toLocaleDateString('en-GB');
-  // console.log('dateof birth is ',dob);
-
   return (
     <>
       {userProfile ? (
@@ -163,14 +151,14 @@ const Updateform = (props: iProps) => {
               >
                 <div className='row my-2'>
                   <div className='col'>
-                    <label htmlFor='firstName'>
+                    <label htmlFor='firstname'>
                       <b>
                         First Name<span className='text-danger'>*</span>
                       </b>
                     </label>
                     <input
                       type='text'
-                      name='firstName'
+                      name='firstname'
                       className='form-control'
                       placeholder='First name'
                       value={data.firstName}
@@ -179,14 +167,14 @@ const Updateform = (props: iProps) => {
                     />
                   </div>
                   <div className='col'>
-                    <label htmlFor='lastName'>
+                    <label htmlFor='lastname'>
                       <b>
                         Last Name<span className='text-danger'>*</span>
                       </b>
                     </label>
                     <input
                       type='text'
-                      name='lastName'
+                      name='lastname'
                       className='form-control'
                       placeholder='Last name'
                       value={data.lastName}

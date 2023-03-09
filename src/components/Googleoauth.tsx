@@ -25,8 +25,6 @@ const Googleoauth = (props :iProps) => {
 
   // Check if the user is already registered or not
   const authenticate = async() => {
-    
-    
     axios
       .post(`${process.env.REACT_APP_API_URL}/data/checkuser`, {
         email: userprofile && userprofile.email,
@@ -41,15 +39,15 @@ const Googleoauth = (props :iProps) => {
           navigate('/registration');
         }
       }).catch((err) => {
-        
+        {props.showAlert('Invalid user', 'warning')}
       });
   };
 
   
 
   // Uppdate login time in database
-  const updateloginTime = async (email: String) => {
-    let lastlogin: String = Date();
+  const updateloginTime = async (email:String) => {
+    let lastlogin:String = Date();
 
     let newData = { lastlogin, email: email };
 
@@ -84,7 +82,7 @@ const Googleoauth = (props :iProps) => {
           headers: {
             Authorization: authorization,
             Accept: 'application/json',
-          },
+          }
         })
         .then((res) => {
           setUserProfile(res.data);
@@ -92,7 +90,6 @@ const Googleoauth = (props :iProps) => {
         })
         .catch((error) => {
           console.log('error', error);
-          console.log(error);
         });
     }
   }, [user]);
@@ -119,8 +116,7 @@ const Googleoauth = (props :iProps) => {
       </div>
       <Button className = 'button'
         variant='danger'
-        onClick={clickHandler
-        }
+        onClick={clickHandler}
       >
         <div className='d-flex justify-content-between align-items-center'>
           <FaGoogle className='mx-2' />

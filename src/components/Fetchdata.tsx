@@ -10,7 +10,7 @@ const Fetchdata = (props: iProps) => {
   const userprofile: IUserProfile = JSON.parse(
     localStorage.getItem('userprofile') as string
   );
-  const [data, setData] = useState<IUser[] | null>([]);
+  const [userData, setUserData] = useState<IUser[] | null>([]);
   const [page, setPage] = useState<number>(1);
   const [totalResult, setTotalResult] = useState<number>(0);
   const [searchTitle, setSearchTitle] = useState<string | number>('');
@@ -36,10 +36,10 @@ const Fetchdata = (props: iProps) => {
       }
     );
 
-    let temp: IDatatype = await response.json();
+    let tempuser: IDatatype = await response.json();
     setLoading(true);
-    setData(temp.User);
-    setTotalResult(Number(temp.totalResults));
+    setUserData(tempuser.User);
+    setTotalResult(Number(tempuser.totalResults));
   };
 
   // Function to get searched data
@@ -64,7 +64,7 @@ const Fetchdata = (props: iProps) => {
       props.showAlert('User not found', 'info');
     }
     setLoading(true);
-    setData(temp.User);
+    setUserData(temp.User);
     setTotalResult(Number(temp.totalResults));
   };
 
@@ -159,8 +159,8 @@ const Fetchdata = (props: iProps) => {
                   </thead>
 
                   <tbody>
-                    {data &&
-                      data.slice(startIndex, endIndex).map((item) => (
+                    {userData &&
+                      userData.slice(startIndex, endIndex).map((item) => (
                         <tr key={item.id}>
                           <td>
                             {item.firstName} {item.lastName}
