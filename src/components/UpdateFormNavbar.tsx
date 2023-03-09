@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
-import { googleLogout } from "@react-oauth/google";
-import { IUserProfile, IProfilePic } from "../Interface/common";
-import { useNavigate } from "react-router";
-import { Dropdown } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { googleLogout } from '@react-oauth/google';
+import { IUserProfile, IProfilePic } from '../Interface/common';
+import { useNavigate } from 'react-router';
+import { Dropdown } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const UpdateFormNavbar = () => {
   const userProfile: IUserProfile = JSON.parse(
-    localStorage.getItem("userprofile") as string
+    localStorage.getItem('userprofile') as string
   );
-  const [profilepic, setProfilePic] = useState<string>("");
+  const [profilepic, setProfilePic] = useState<string>('');
   const navigate = useNavigate();
 
   // Function to get image of logged in user
@@ -17,9 +17,9 @@ const UpdateFormNavbar = () => {
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/data/fetchdata/${userProfile.email}`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       }
     );
@@ -32,7 +32,7 @@ const UpdateFormNavbar = () => {
   const logout = () => {
     googleLogout();
     localStorage.clear();
-    navigate("/");
+    navigate('/');
   };
 
   // Use effect to call the funcion to get image of logged in user
@@ -41,47 +41,47 @@ const UpdateFormNavbar = () => {
   }, []);
 
   return (
-    <div style={{ marginTop: "110px" }}>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark navbar-position">
-        <div className="container-fluid">
-          <span className="navbar-brand">User Directory</span>
-          <ul className="navbar-nav mt-1" >
-            <Link className="nav-link" to="/home">
+    <div style={{ marginTop: '110px' }}>
+      <nav className='navbar navbar-expand-lg navbar-dark bg-dark navbar-position'>
+        <div className='container-fluid'>
+          <span className='navbar-brand'>User Directory</span>
+          <ul className='navbar-nav mt-1' >
+            <Link className='nav-link' to='/home'>
               <b>Home</b>
             </Link>
           </ul>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav me-auto"></ul>
-            <ul className="navbar-nav">
-              <li className="nav-item dropdown">
+          <div className='collapse navbar-collapse' id='navbarNav'>
+            <ul className='navbar-nav me-auto'></ul>
+            <ul className='navbar-nav'>
+              <li className='nav-item dropdown'>
                 <Dropdown>
-                  <Dropdown.Toggle variant="link" id="dropdown-basic">
-                    {profilepic.includes("google") ? (
+                  <Dropdown.Toggle variant='link' id='dropdown-basic'>
+                    {profilepic.includes('google') ? (
                       <img
-                        className="navbar-image "
+                        className='navbar-image '
                         src={profilepic}
-                        alt="ProfilePic"
+                        alt='ProfilePic'
                       />
                     ) : (
                       profilepic && (
                         <img
-                          className="navbar-image"
+                          className='navbar-image'
                           src={`${process.env.REACT_APP_API_URL}/uploads/${profilepic}`}
-                          alt="ProfilePic"
+                          alt='ProfilePic'
                         />
                       )
                     )}
                   </Dropdown.Toggle>
 
-                  <Dropdown.Menu align="end">
+                  <Dropdown.Menu align='end'>
                     <Dropdown.Item>
                       <b>Hello, {userProfile.name}</b>
                     </Dropdown.Item>
                     <Dropdown.Divider />
                     <Dropdown.Item
-                      className="navbar-logout"
+                      className='navbar-logout'
                       as={Link}
-                      to="/"
+                      to='/'
                       onClick={logout}
                     >
                       Logout
