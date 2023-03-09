@@ -100,9 +100,11 @@ const Fetchdata = (props: iProps) => {
 
   // Use effect to fetch the data initially and every time when searchtitle is empty
   useEffect(() => {
-    // setLoading(false);
-    getData();
+    setTimeout(() =>{
+      getData();
     setPage(searchPage);
+    },2500)
+    
   }, []);
 
   return (
