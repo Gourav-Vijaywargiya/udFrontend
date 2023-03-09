@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { user, datatype, userProfile, iProps } from "../Interface/common";
+import { IUser, IDatatype, IUserProfile, iProps } from "../Interface/common";
 import { googleLogout } from "@react-oauth/google";
 import { useNavigate } from "react-router";
 import axios from "axios";
@@ -7,13 +7,12 @@ import moment from "moment";
 import Alert from "./Alert";
 
 const Registration = (props: iProps) => {
-  const [profile, setProfile] = useState<userProfile | null>(
-    JSON.parse(localStorage.getItem("profile") as string)
+  const [profile, setProfile] = useState<IUserProfile | null>(
+    JSON.parse(localStorage.getItem("userprofile") as string)
   );
   const [mobile, setMobile] = useState<string>();
   const [gender, setGender] = useState<string>("");
-  const [dob, setDOB] = useState<string>("");
-  const [show, setShow] = useState<boolean>(false);
+  const [dob, setDob] = useState<string>("");
   const [aboutme, setAboutMe] = useState<string>("");
   const navigate = useNavigate();
 
@@ -33,7 +32,7 @@ const Registration = (props: iProps) => {
       dob,
       gender,
       aboutme,
-      loginTime: moment().format("YYYY-MM-DD HH:mm:ss a"),
+      loginTime: moment().format("DD-MM-YYYY HH:mm:ss a"),
       lastlogin: Date(),
       ...profile,
     };
@@ -42,31 +41,31 @@ const Registration = (props: iProps) => {
       `${process.env.REACT_APP_API_URL}/data/userdetails`,
       userDetails
     );
-    localStorage.setItem("profile", JSON.stringify(userDetails));
+    localStorage.setItem("userprofile", JSON.stringify(userDetails));
     navigate("/home");
     props.showAlert("Registerd Successfully", "Success");
   };
 
   return (
-    <>
-      <div style={{ margin: "20px" }}>
+    <div className ="container form">
+      <div>
         <img
-          style={{ margin: "5px" }}
           src={profile!.picture}
           alt="Profile Picture"
         />
-        <h3 style={{ margin: "1px" }}>{profile!.name} LoggedIn</h3>
-        <h6 style={{ marginTop: "5px" }}>Name : {profile!.name}</h6>
-        <h6 style={{ marginTop: "5px" }}>Email : {profile!.email}</h6>
+        <h3 >{profile!.name} LoggedIn</h3>
+        <h6 >Name : {profile!.name}</h6>
+        <h6 >Email : {profile!.email}</h6>
         <button className=" btn btn-danger my-3" onClick={logOut}>
           logout
         </button>
         <br />
         <br />
       </div>
-      <form style={{ marginLeft: "20px" }} onSubmit={handleSubmit}>
+      <form  onSubmit={handleSubmit}>
         <h3>Enter Required Details</h3>
-        <label style={{ marginRight: "5px" }} htmlFor="mobile">
+        <div className = "form-details">
+        <label htmlFor="mobile">
           <b>
             Mobile No:<span className="text-danger">*</span>
           </b>
@@ -82,8 +81,10 @@ const Registration = (props: iProps) => {
           maxLength={10}
           required
         />
+      </div>
 
-        <label style={{ marginLeft: "10px", marginRight: "5px" }} htmlFor="dob">
+      <div className = "form-details">
+        <label htmlFor="dob">
           <b>
             Date of Birth:<span className="text-danger">*</span>
           </b>
@@ -94,13 +95,14 @@ const Registration = (props: iProps) => {
           value={dob}
           max={moment().format("YYYY-MM-DD")}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setDOB(e.target.value)
+            setDob(e.target.value)
           }
           required
         />
+        </div>
 
+        <div className = "form-details">
         <label
-          style={{ marginLeft: "10px", marginRight: "5px" }}
           htmlFor="gender"
         >
           <b>
@@ -120,9 +122,10 @@ const Registration = (props: iProps) => {
           <option value="male">Male</option>
           <option value="female">Female</option>
         </select>
+        </div>
 
+        <div className = "form-details">
         <label
-          style={{ marginLeft: "10px", marginRight: "5px" }}
           htmlFor="aboutme"
         >
           <b>
@@ -131,7 +134,6 @@ const Registration = (props: iProps) => {
         </label>
         <textarea
           name="aboutme"
-          style={{ marginBottom: "-3px", height: "28px" }}
           value={aboutme}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
             setAboutMe((e.target as HTMLTextAreaElement).value)
@@ -139,16 +141,17 @@ const Registration = (props: iProps) => {
           maxLength ={300}
           required
         ></textarea>
-
+      </div>
+      <div>
         <button
-          className="btn btn-success"
-          style={{ marginLeft: "10px", marginBottom: "8px" }}
+          className="btn btn-success my-2"
           type="submit"
         >
           Submit
         </button>
+        </div>
       </form>
-    </>
+    </div>
   );
 };
 

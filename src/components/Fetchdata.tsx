@@ -1,15 +1,16 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router";
-import { user, datatype, userProfile, iProps } from "../Interface/common";
+import { IUser, IDatatype, IUserProfile, iProps } from "../Interface/common";
 import Alert from "./Alert";
 import Navbar from "./Navbar";
 import Spinner from "./Spinner";
+import moment from "moment";
 
-const Fetchdata = (props : iProps) => {
-  const userprofile: userProfile = JSON.parse(
-    localStorage.getItem("profile") as string
+const Fetchdata = (props: iProps) => {
+  const userprofile: IUserProfile = JSON.parse(
+    localStorage.getItem("userprofile") as string
   );
-  const [data, setData] = useState<user[] | null>([]);
+  const [data, setData] = useState<IUser[] | null>([]);
   const [page, setPage] = useState<number>(1);
   const [totalResult, setTotalResult] = useState<number>(0);
   const [searchTitle, setSearchTitle] = useState<string | number>("");
@@ -19,7 +20,7 @@ const Fetchdata = (props : iProps) => {
   const endIndex = page * limit;
   const [searchPage, setSearchPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
-  const inputRef = useRef<HTMLInputElement>(null);  
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Funtion to get complete data
   const getData = async () => {
@@ -35,11 +36,10 @@ const Fetchdata = (props : iProps) => {
       }
     );
 
-    let temp: datatype = await response.json();
+    let temp: IDatatype = await response.json();
     setLoading(true);
     setData(temp.User);
     setTotalResult(Number(temp.totalResults));
-    
   };
 
   // Function to get searched data
@@ -57,12 +57,10 @@ const Fetchdata = (props : iProps) => {
       }
     );
 
-    let temp: datatype = await response.json();
-    if(temp.User.length > 0)
-    {
+    let temp: IDatatype = await response.json();
+    if (temp.User.length > 0) {
       props.showAlert("User found", "info");
-    }
-    else{
+    } else {
       props.showAlert("User not found", "info");
     }
     setLoading(true);
@@ -70,11 +68,11 @@ const Fetchdata = (props : iProps) => {
     setTotalResult(Number(temp.totalResults));
   };
 
-  const handleKeypress =(e: React.KeyboardEvent<HTMLInputElement>) : void => {
-     if(e.key === "Enter") {
+  const handleKeypress = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (e.key === "Enter") {
       getSearchData();
-     }
-  }
+    }
+  };
 
   // funtion to change page number according to pagination
   const changePage = (type: string): void => {
@@ -91,112 +89,107 @@ const Fetchdata = (props : iProps) => {
   };
 
   // Function to reset the search field
-  const onClickReset =() =>{
+  const onClickReset = () => {
     const inputElement = inputRef.current;
     if (inputElement) {
       inputElement.value = "";
     }
     setSearchTitle("");
     getData();
-  }
+  };
 
   // Use effect to fetch the data initially and every time when searchtitle is empty
   useEffect(() => {
-      // setLoading(false);
-      getData();
-      setPage(searchPage);  
+    // setLoading(false);
+    getData();
+    setPage(searchPage);
   }, []);
-
 
   return (
     <>
-      {
-        userprofile ? (
+      {userprofile ? (
         <>
           <Navbar />
-          <Alert showAlert = {props.showAlert} alert ={props.alert}/>
+          <Alert showAlert={props.showAlert} alert={props.alert} />
           <div className="container container-fluid mt-8 p-0">
-            <div className="container d-flex justify-content-between align-items-center my-3 p-0">
+            <div className="container d-flex justify-content-between align-items-center my-3 p-0 searchbar">
               <input
+                className=" searchbar-input"
                 type={"text" || "tel"}
-                id="my-input" 
+                id="my-input"
                 ref={inputRef}
-                placeholder= "Search by First name,Last name,Email,Mobile number"
+                placeholder="Search by First name,Last name,Email,Mobile number"
                 onChange={(e) => {
                   setSearchTitle(e.target.value);
                 }}
-                onKeyDown = { handleKeypress}
-                style={{ width: "83%", height: "50px", padding: "15px" }}
+                onKeyDown={handleKeypress}
               />
               <button
-                className="btn btn-primary "
+                className="btn btn-primary searchbar-button"
                 type="submit"
-                style={{ width: "8%", height: "50px" }}
                 onClick={getSearchData}
-               
+                disabled={!searchTitle}
               >
                 Search
               </button>
               <button
-                className="btn btn-danger "
+                className="btn btn-danger searchbar-button"
                 type="submit"
-                style={{ width: "8%", height: "50px" }}
                 onClick={onClickReset}
+                disabled={!searchTitle}
               >
                 Reset
               </button>
             </div>
             {loading ? (
-              <div style={{ height: "400px", overflowY: "scroll" }}>
-              <table
-                className="table table-bordered table-hover"
-                style={{ borderColor: "ActiveBorder" }}
-              >
-                <thead>
-                  <tr>
-                    <th scope="col"> Name </th>
-                    <th scope="col">First Name </th>
-                    <th scope="col">Last Name </th>
-                    <th scope="col">Image </th>
-                    <th scope="col">Email </th>
-                    <th scope="col">Mobile No. </th>
-                    <th scope="col">Gender </th>
-                    <th scope="col">Date of Birth </th>
-                    <th scope="col">About Me </th>
-                  </tr>
-                </thead>
+              <div>
+                <table className="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col"> Name </th>
+                      <th scope="col">First Name </th>
+                      <th scope="col">Last Name </th>
+                      <th scope="col">Image </th>
+                      <th scope="col">Email </th>
+                      <th scope="col">Mobile No. </th>
+                      <th scope="col">Gender </th>
+                      <th scope="col">Date of Birth </th>
+                      <th scope="col">About Me </th>
+                    </tr>
+                  </thead>
 
-                <tbody style={{ backgroundColor: "#F0F8FF" }}>
-                  {data &&
-                    data.slice(startIndex, endIndex).map((item) => (
-                      <tr key={item.id}>
-                        <td>{item.firstName} {item.lastName}</td>
-                        <td>{item.firstName} </td>
-                        <td>{item.lastName} </td>
-                        <td>
-                          {item.image.includes("google") ? (
-                            <img
-                              style={{ width: "100px", height: "80px" }}
-                              src={item.image}
-                              alt="ProfilePic"
-                            />
-                          ) : (
-                            <img
-                              style={{ width: "100px", height: "80px" }}
-                              src={`${process.env.REACT_APP_API_URL}/uploads/${item.image}`}
-                              alt="ProfilePic"
-                            />
-                          )}
-                        </td>
-                        <td>{item.email} </td>
-                        <td>{item.Mobile}</td>
-                        <td>{item.Gender}</td>
-                        <td>{item.DateofBirth.slice(0, 10)}</td>
-                        <td>{item.aboutme}</td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
+                  <tbody>
+                    {data &&
+                      data.slice(startIndex, endIndex).map((item) => (
+                        <tr key={item.id}>
+                          <td>
+                            {item.firstName} {item.lastName}
+                          </td>
+                          <td>{item.firstName} </td>
+                          <td>{item.lastName} </td>
+                          <td>
+                            {item.image.includes("google") ? (
+                              <img src={item.image} alt="ProfilePic" />
+                            ) : (
+                              item.image && (
+                                <img
+                                  src={`${process.env.REACT_APP_API_URL}/uploads/${item.image}`}
+                                  alt="ProfilePic"
+                                />
+                              )
+                            )}
+                          </td>
+                          <td>{item.email} </td>
+                          <td>{item.Mobile}</td>
+                          <td>{item.Gender}</td>
+                          <td>
+                            {moment(item.DateofBirth).format("DD-MM-YYYY")}
+                          </td>
+                          <td>{item.aboutme}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
               </div>
             ) : (
               <Spinner />
@@ -204,10 +197,7 @@ const Fetchdata = (props : iProps) => {
             <div className="my-3">
               <b>Totalusers: {totalResult}</b>
             </div>
-            <div
-              className="d-flex justify-content-between"
-              style={{ width: "100%" }}
-            >
+            <div className="d-flex justify-content-between footer">
               <button
                 className="btn btn-primary"
                 onClick={(e) => changePage("prev")}
@@ -215,9 +205,12 @@ const Fetchdata = (props : iProps) => {
               >
                 Previous
               </button>
-              <span style={{ marginTop: "8px" }}>
+              <span className="pageno">
                 <b>
-                  page {page} of {Math.ceil(totalResult / limit)? Math.ceil(totalResult / limit) : 1}
+                  page {page} of{" "}
+                  {Math.ceil(totalResult / limit)
+                    ? Math.ceil(totalResult / limit)
+                    : 1}
                 </b>
               </span>
               <button
@@ -230,13 +223,12 @@ const Fetchdata = (props : iProps) => {
             </div>
           </div>
         </>
-        ) :(
-          <>
+      ) : (
+        <>
           {props.showAlert("Please Login to continue", "warning")}
           {navigate("/")}
-          </>
-        )
-     }
+        </>
+      )}
     </>
   );
 };

@@ -1,4 +1,4 @@
-export interface user {
+export interface IUser {
   _id: string;
   id: string;
   name: string;
@@ -15,12 +15,12 @@ export interface user {
   __v: number;
 }
 
-export interface datatype {
-  User: user[];
+export interface IDatatype {
+  User: IUser[];
   totalResults: number;
 }
 
-export interface profilepic{
+export interface IProfilePic{
   _id: string;
   id: string;
   name: string;
@@ -37,7 +37,7 @@ export interface profilepic{
   __v: number;
 }
 
-export interface userProfile {
+export interface IUserProfile {
   name: string ;
   given_name: string ;
   family_name: string ;
@@ -45,7 +45,7 @@ export interface userProfile {
   picture: string | undefined;
 }
 
-export interface Profile {
+export interface IProfile {
   name: string | null;
   firstName: string | null;
   lastName: string | null;
@@ -53,7 +53,7 @@ export interface Profile {
   picture: string | undefined;
 }
 
-export interface updateFormData {
+export interface IUpdateFormData {
   name: string;
   firstName: string;
   lastName: string;
@@ -67,7 +67,7 @@ export interface updateFormData {
 }
 
 
-export interface googleOauthProfile {
+export interface IGoogleOauthProfile {
   id: string,
   email: string,
   verified_email: boolean,
@@ -78,7 +78,7 @@ export interface googleOauthProfile {
   locale: string
 }
 
-export interface googleOauthUser{
+export interface IGoogleOauthUser{
     access_token: string,
     authuser?: string,
     expires_in: number,

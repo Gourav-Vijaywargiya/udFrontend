@@ -1,4 +1,3 @@
-import React from 'react'
 import { iProps } from '../Interface/common';
 
 const Alert = (props : iProps) => {

@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { userProfile, updateFormData, iProps } from "../Interface/common";
+import { IUserProfile, IUpdateFormData, iProps } from "../Interface/common";
 import Alert from "./Alert";
 import Spinner from "./Spinner";
 import UpdateFormNavbar from "./UpdateFormNavbar";
 import moment from "moment";
 
 const Updateform = (props: iProps) => {
-  const userProfile: userProfile = JSON.parse(
-    localStorage.getItem("profile") as string
+  const userProfile: IUserProfile = JSON.parse(
+    localStorage.getItem("userprofile") as string
   );
   const Navigate = useNavigate();
-  const [data, setData] = useState<updateFormData>({
+  const [data, setData] = useState<IUpdateFormData>({
     name: "userProfile.name",
     firstName: "userProfile.given_name",
     lastName: "userProfile.family_name",
@@ -107,7 +107,6 @@ const Updateform = (props: iProps) => {
       "content-type": "multipart/form-data;",
     };
 
-    
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/data/updatedata`,
       {
@@ -115,7 +114,7 @@ const Updateform = (props: iProps) => {
         body: formData,
       }
     );
-      setLoading(false);
+    setLoading(false);
     Navigate("/home");
     props.showAlert("Profile Updated Successfully", "success");
     return response.json();
@@ -138,10 +137,10 @@ const Updateform = (props: iProps) => {
   // console.log("dob", data.DateofBirth);
 
   // const originalString = data.DateofBirth;
-  
+
   // // Parse string into date object
   // const dateObject = new Date(originalString);
-  
+
   // // Format date object into desired string format
   // const dob = dateObject.toLocaleDateString("en-GB");
   // console.log("dateof birth is ",dob);
@@ -153,18 +152,13 @@ const Updateform = (props: iProps) => {
           <UpdateFormNavbar />
           {loading ? (
             <div>
-              <div
-                style={{
-                  marginLeft: "30px",
-                  marginBottom: "30px",
-                  marginTop: "15px",
-                }}
+              <div className ="update-form"
               >
                 <h1>Details</h1>
               </div>
               <form
+              className = "update-form-details"
                 onSubmit={submitData}
-                style={{ marginLeft: "30px", marginRight: "30px" }}
                 encType="multipart/form-data"
               >
                 <div className="row my-2">
@@ -280,9 +274,8 @@ const Updateform = (props: iProps) => {
                       </b>
                     </label>
                     <textarea
-                      style={{ height: "100px" }}
+                      className="form-control text-area"
                       name="aboutme"
-                      className="form-control"
                       placeholder="About me"
                       value={data.aboutme}
                       onChange={onChangeAbout}
@@ -292,11 +285,11 @@ const Updateform = (props: iProps) => {
                   </div>
                   <div className="col">
                     <div>
-                      <label htmlFor="image" style={{ marginBottom: "35px" }}>
+                      <label className ="image-label" htmlFor="image">
                         <b>Profile Picture</b>
                       </label>{" "}
                     </div>
-                    <div style ={{marginTop :"-25px"}}>
+                    <div className = "input-image">
                       <input
                         type="file"
                         name="image"
@@ -306,16 +299,18 @@ const Updateform = (props: iProps) => {
                       {typeof data.image === "string" &&
                       data.image.includes("google") ? (
                         <img
-                          style={{ width: "100px", height: "80px" }}
+                        className="update-form-image"
                           src={data.image as string}
                           alt="ProfilePic"
                         />
                       ) : (
-                        <img
-                          style={{ width: "100px", height: "80px" }}
-                          src={`${process.env.REACT_APP_API_URL}/uploads/${data.image}`}
-                          alt="ProfilePic"
-                        />
+                        data.image && (
+                          <img
+                            className="update-form-image"
+                            src={`${process.env.REACT_APP_API_URL}/uploads/${data.image}`}
+                            alt="ProfilePic"
+                          />
+                        )
                       )}
                     </div>
                   </div>

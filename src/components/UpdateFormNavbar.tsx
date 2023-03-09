@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { googleLogout } from "@react-oauth/google";
-import { userProfile, profilepic } from "../Interface/common";
+import { IUserProfile, IProfilePic } from "../Interface/common";
 import { useNavigate } from "react-router";
 import { Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const UpdateFormNavbar = () => {
-  const userProfile: userProfile = JSON.parse(
-    localStorage.getItem("profile") as string
+  const userProfile: IUserProfile = JSON.parse(
+    localStorage.getItem("userprofile") as string
   );
   const [profilepic, setProfilePic] = useState<string>("");
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const UpdateFormNavbar = () => {
       }
     );
 
-    let temp: profilepic = await response.json();
+    let temp: IProfilePic = await response.json();
     setProfilePic(temp.image);
   };
 
@@ -41,65 +41,58 @@ const UpdateFormNavbar = () => {
   }, []);
 
   return (
-    <div>
-      <div style={{ marginTop: "110px" }}>
-        <nav
-          className="navbar navbar-expand-lg navbar-dark bg-dark"
-          style={{ position: "fixed", top: "0px", width: "100%" }}
-        >
-          <div className="container-fluid">
-            <span className="navbar-brand">User Directory</span>
-            <ul className="navbar-nav " style ={{marginTop:"7px"}}><Link className="nav-link" to ='/home'><b>Home</b></Link></ul>
-            <div className="collapse navbar-collapse" id="navbarNav">
-              <ul className="navbar-nav me-auto"></ul>
-              <ul className="navbar-nav">
-                <li className="nav-item dropdown">
-                  <Dropdown>
-                    <Dropdown.Toggle variant="link" id="dropdown-basic">
-                      {profilepic.includes("google") ? (
+    <div style={{ marginTop: "110px" }}>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark navbar-position">
+        <div className="container-fluid">
+          <span className="navbar-brand">User Directory</span>
+          <ul className="navbar-nav mt-1" >
+            <Link className="nav-link" to="/home">
+              <b>Home</b>
+            </Link>
+          </ul>
+          <div className="collapse navbar-collapse" id="navbarNav">
+            <ul className="navbar-nav me-auto"></ul>
+            <ul className="navbar-nav">
+              <li className="nav-item dropdown">
+                <Dropdown>
+                  <Dropdown.Toggle variant="link" id="dropdown-basic">
+                    {profilepic.includes("google") ? (
+                      <img
+                        className="navbar-image "
+                        src={profilepic}
+                        alt="ProfilePic"
+                      />
+                    ) : (
+                      profilepic && (
                         <img
-                          style={{
-                            width: "80px",
-                            height: "70px",
-                            borderRadius: "100%",
-                          }}
-                          src={profilepic}
-                          alt="ProfilePic"
-                        />
-                      ) : (
-                        <img
-                          style={{
-                            width: "80px",
-                            height: "70px",
-                            borderRadius: "100%",
-                          }}
+                          className="navbar-image"
                           src={`${process.env.REACT_APP_API_URL}/uploads/${profilepic}`}
                           alt="ProfilePic"
                         />
-                      )}
-                    </Dropdown.Toggle>
+                      )
+                    )}
+                  </Dropdown.Toggle>
 
-                    <Dropdown.Menu align="end">
-                      <Dropdown.Item>
-                        <b>Hello, {userProfile.name}</b>
-                      </Dropdown.Item>
-                      <Dropdown.Divider />
-                      <Dropdown.Item
-                        as={Link}
-                        to="/"
-                        onClick={logout}
-                        style={{ backgroundColor: "red" }}
-                      >
-                        Logout
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </li>
-              </ul>
-            </div>
+                  <Dropdown.Menu align="end">
+                    <Dropdown.Item>
+                      <b>Hello, {userProfile.name}</b>
+                    </Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item
+                      className="navbar-logout"
+                      as={Link}
+                      to="/"
+                      onClick={logout}
+                    >
+                      Logout
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </li>
+            </ul>
           </div>
-        </nav>
-      </div>
+        </div>
+      </nav>
     </div>
   );
 };
