@@ -16,18 +16,16 @@ const Fetchdata = (props: iProps) => {
   const [searchTitle, setSearchTitle] = useState<string | number>('');
   const limit: number = 5;
   const navigate = useNavigate();
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-  const [searchPage, setSearchPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [reset,setReset] = useState<number>(1);
 
   // Funtion to get complete data
   const getData = async () => {
-    setPage(searchPage);
+    // setPage(searchPage);
     setLoading(false);
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/data/fetchdata`,
+      `${process.env.REACT_APP_API_URL }/data/fetchdata?page=${page}&limit=${limit}`,
       {
         method: 'GET',
         headers: {
@@ -44,11 +42,9 @@ const Fetchdata = (props: iProps) => {
 
   // Function to get searched data
   const getSearchData = async () => {
-    setSearchPage(page);
-    setPage(1);
     setLoading(false);
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/data/fetchsearchdata/${searchTitle}`,
+      `${process.env.REACT_APP_API_URL}/data/fetchsearchdata/${searchTitle}?page=${page}&limit=${limit}`,
       {
         method: 'GET',
         headers: {
@@ -70,7 +66,12 @@ const Fetchdata = (props: iProps) => {
 
   const handleKeypress = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
-      getSearchData();
+      if(page ===1){
+        getSearchData();
+      }
+      else{
+        setPage(1);
+      }
     }
   };
 
@@ -83,29 +84,38 @@ const Fetchdata = (props: iProps) => {
     }
   };
 
-  // Function to navigate to update page
-  const updateData = () => {
-    navigate('/data/updatedata');
-  };
+
+   // Function to call search data
+   const onClickSearch = () =>{
+    if(page ===1){
+      getSearchData();
+    }
+    else{
+      setPage(1);
+    }
+  }
 
   // Function to reset the search field
   const onClickReset = () => {
+    setPage(1);
+    setReset((old) => old + 1);
     const inputElement = inputRef.current;
     if (inputElement) {
       inputElement.value = '';
     }
     setSearchTitle('');
-    getData();
   };
 
   // Use effect to fetch the data initially and every time when searchtitle is empty
   useEffect(() => {
-    setTimeout(() =>{
+    if(searchTitle === ''){
+
       getData();
-    setPage(searchPage);
-    },2500)
-    
-  }, []);
+  }
+  else{
+      getSearchData();
+  }
+  }, [page,reset]);
 
   return (
     <>
@@ -129,7 +139,7 @@ const Fetchdata = (props: iProps) => {
               <button
                 className='btn btn-primary searchbar-button'
                 type='submit'
-                onClick={getSearchData}
+                onClick={onClickSearch}
                 disabled={!searchTitle}
               >
                 Search
@@ -162,7 +172,7 @@ const Fetchdata = (props: iProps) => {
 
                   <tbody>
                     {userData &&
-                      userData.slice(startIndex, endIndex).map((item) => (
+                      userData.map((item) => (
                         <tr key={item.id}>
                           <td>
                             {item.firstName} {item.lastName}

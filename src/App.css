@@ -67,7 +67,7 @@ table {
 tbody {
   background-color: #f0f8ff;
   display: block;
-  height: 400px;
+  max-height: 400px;
   overflow: auto;
 }
 
