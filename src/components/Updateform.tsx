@@ -5,7 +5,6 @@ import Spinner from "./Spinner";
 import UpdateFormNavbar from "./UpdateFormNavbar";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_green.css";
-import moment from "moment";
 import axios from "axios";
 
 const Updateform = (props: iProps) => {
