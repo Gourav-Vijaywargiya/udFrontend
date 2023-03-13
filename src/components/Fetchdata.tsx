@@ -154,7 +154,7 @@ const Fetchdata = (props: iProps) => {
               </button>
             </div>
             {loading ? (
-              <div>
+              <div className='scrollabletable'>
                 <table className='table table-bordered table-hover'>
                   <thead>
                     <tr>

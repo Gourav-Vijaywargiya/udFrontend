@@ -59,7 +59,8 @@ export interface IUpdateFormData {
   lastName: string;
   email: string;
   Mobile: string;
-  DateofBirth: string ;
+  // DateofBirth: string ;
+  DateofBirth: string;
   Gender: string;
   image: string | File;
   aboutme: string;

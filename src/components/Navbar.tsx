@@ -27,7 +27,7 @@ const Navbar = () => {
 
     let temp: IProfilePic = await response.json();
     setData(temp!);
-    setProfilePic(temp.image);
+    setProfilePic(temp!.image);
   };
 
   // Function to logout user
@@ -80,6 +80,7 @@ const Navbar = () => {
                     ) : (
                       profilepic && (
                         <img
+                          className="navbar-image"
                           src={`${process.env.REACT_APP_API_URL}/uploads/${profilepic}`}
                           alt="ProfilePic"
                         />

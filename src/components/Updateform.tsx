@@ -1,25 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
-import { IUserProfile, IUpdateFormData, iProps } from '../Interface/common';
-import Spinner from './Spinner';
-import UpdateFormNavbar from './UpdateFormNavbar';
-import moment from 'moment';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { IUserProfile, IUpdateFormData, iProps } from "../Interface/common";
+import Spinner from "./Spinner";
+import UpdateFormNavbar from "./UpdateFormNavbar";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_green.css";
+import moment from "moment";
+import axios from "axios";
 
 const Updateform = (props: iProps) => {
   const userProfile: IUserProfile = JSON.parse(
-    localStorage.getItem('userprofile') as string
+    localStorage.getItem("userprofile") as string
   );
   const Navigate = useNavigate();
   const [data, setData] = useState<IUpdateFormData>({
-    name: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    Mobile: '',
-    DateofBirth: '',
-    Gender: '',
-    image: '',
-    aboutme: ''
+    name: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    Mobile: "",
+    DateofBirth: "",
+    Gender: "",
+    image: "",
+    aboutme: "",
   });
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -29,9 +32,9 @@ const Updateform = (props: iProps) => {
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/data/fetchdata/${email}`,
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       }
     );
@@ -45,31 +48,28 @@ const Updateform = (props: iProps) => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setData({
       ...data,
-      [(e.target as HTMLInputElement).name]: e.target.value,
+      [e.target.name]: e.target.value,
     });
   };
 
   const onChangeAbout = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
     setData({
       ...data,
-      [(e.target as HTMLTextAreaElement).name]: e.target.value,
+      [e.target.name]: e.target.value,
     });
   };
 
   const onChangegender = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     setData({
       ...data,
-      [(e.target as HTMLSelectElement).name]: e.target.value,
+      [e.target.name]: e.target.value,
     });
   };
 
   const onChangeMobile = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData({
       ...data,
-      [(e.target as HTMLInputElement).name]: e.target.value.replace(
-        /[^\d+]/g,
-        ''
-      ),
+      [e.target.name]: e.target.value.replace(/[^\d+]/g, ""),
     });
   };
 
@@ -92,31 +92,33 @@ const Updateform = (props: iProps) => {
 
     const formData = new FormData();
 
-    formData.append('email', newData.email);
-    formData.append('name', newData.name);
-    formData.append('lastName', newData.lastName);
-    formData.append('firstName', newData.firstName);
-    formData.append('DateofBirth', newData.DateofBirth);
-    formData.append('Gender', newData.Gender);
-    formData.append('aboutme', newData.aboutme);
-    formData.append('image', newData.image);
-    formData.append('Mobile', newData.Mobile);
+
+    formData.append("email", newData.email);
+    formData.append("name", newData.name);
+    formData.append("lastName", newData.lastName);
+    formData.append("firstName", newData.firstName);
+    formData.append("DateofBirth", newData.DateofBirth);
+    formData.append("Gender", newData.Gender);
+    formData.append("aboutme", newData.aboutme);
+    formData.append("image", newData.image);
+    formData.append("Mobile", newData.Mobile);
 
     const headers = {
-      'content-type': 'multipart/form-data;',
+      "content-type": "multipart/form-data;",
     };
 
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/data/updatedata`,
-      {
-        method: 'PATCH',
-        body: formData,
-      }
+    const response = axios.patch(
+      `${process.env.REACT_APP_API_URL}/data/updatedata`,formData
     );
     setLoading(false);
-    Navigate('/home');
-    props.showAlert('Profile Updated Successfully', 'success');
-    return response.json();
+    Navigate("/home");
+    props.showAlert("Profile Updated Successfully", "success");
+  };
+
+  const dateFormatChange = (date: Date) => {
+    const offset = date.getTimezoneOffset();
+    date = new Date(date.getTime() - offset * 60 * 1000);
+    return date.toISOString().split("T")[0];
   };
 
   // Use effect to get the data of logged in user
@@ -125,10 +127,10 @@ const Updateform = (props: iProps) => {
       getData(userProfile.email as string);
     } else {
       {
-        props.showAlert('Please Login before continue', 'warning');
+        props.showAlert("Please Login before continue", "warning");
       }
       {
-        Navigate('/');
+        Navigate("/");
       }
     }
   }, []);
@@ -140,43 +142,42 @@ const Updateform = (props: iProps) => {
           <UpdateFormNavbar />
           {loading ? (
             <div>
-              <div className ='update-form'
-              >
+              <div className="update-form">
                 <h1>Details</h1>
               </div>
               <form
-              className = 'update-form-details'
+                className="update-form-details"
                 onSubmit={submitData}
-                encType='multipart/form-data'
+                encType="multipart/form-data"
               >
-                <div className='row my-2'>
-                  <div className='col'>
-                    <label htmlFor='firstname'>
+                <div className="row my-2">
+                  <div className="col">
+                    <label htmlFor="firstName">
                       <b>
-                        First Name<span className='text-danger'>*</span>
+                        First Name<span className="text-danger">*</span>
                       </b>
                     </label>
                     <input
-                      type='text'
-                      name='firstname'
-                      className='form-control'
-                      placeholder='First name'
+                      type="text"
+                      name="firstName"
+                      className="form-control"
+                      placeholder="First name"
                       value={data.firstName}
                       onChange={onChange}
                       required
                     />
                   </div>
-                  <div className='col'>
-                    <label htmlFor='lastname'>
+                  <div className="col">
+                    <label htmlFor="lastName">
                       <b>
-                        Last Name<span className='text-danger'>*</span>
+                        Last Name<span className="text-danger">*</span>
                       </b>
                     </label>
                     <input
-                      type='text'
-                      name='lastname'
-                      className='form-control'
-                      placeholder='Last name'
+                      type="text"
+                      name="lastName"
+                      className="form-control"
+                      placeholder="Last name"
                       value={data.lastName}
                       onChange={onChange}
                       required
@@ -184,33 +185,33 @@ const Updateform = (props: iProps) => {
                   </div>
                 </div>
 
-                <div className='row my-2'>
-                  <div className='col'>
-                    <label htmlFor='name'>
+                <div className="row my-2">
+                  <div className="col">
+                    <label htmlFor="name">
                       <b>Email</b>
                     </label>
                     <input
-                      type='text'
-                      name='name'
-                      className='form-control'
-                      placeholder='Name'
+                      type="text"
+                      name="name"
+                      className="form-control"
+                      placeholder="Name"
                       value={data.email}
                       disabled
                     />
                   </div>
-                  <div className='col'>
-                    <label htmlFor='Mobile'>
+                  <div className="col">
+                    <label htmlFor="Mobile">
                       <b>
-                        Mobile<span className='text-danger'>*</span>
+                        Mobile<span className="text-danger">*</span>
                       </b>
                     </label>
                     <input
-                      type='tel'
-                      name='Mobile'
-                      className='form-control'
-                      placeholder='Mobile No'
+                      type="tel"
+                      name="Mobile"
+                      className="form-control"
+                      placeholder="Mobile No"
                       onChange={onChangeMobile}
-                      pattern='[0-9]{10,14}'
+                      pattern="[0-9]{10,14}"
                       maxLength={10}
                       value={data.Mobile}
                       required
@@ -218,92 +219,98 @@ const Updateform = (props: iProps) => {
                   </div>
                 </div>
 
-                <div className='row my-2'>
-                  <div className='col'>
-                    <label htmlFor='Gender'>
+                <div className="row my-2">
+                  <div className="col">
+                    <label htmlFor="Gender">
                       <b>
-                        Gender<span className='text-danger'>*</span>
+                        Gender<span className="text-danger">*</span>
                       </b>
                     </label>
                     <select
-                      name='Gender'
-                      className='form-control'
+                      name="Gender"
+                      className="form-control"
                       value={data.Gender}
                       onChange={onChangegender}
                       required
                     >
-                      <option value='Male'>Male</option>
-                      <option value='Female'>Female</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
                     </select>
                   </div>
-                  <div className='col'>
-                    <label htmlFor='DateofBirth'>
+                  <div className="col">
+                    <label htmlFor="DateofBirth">
                       <b>
-                        Date of Birth<span className='text-danger'>*</span>
+                        Date of Birth<span className="text-danger">*</span>
                       </b>
                     </label>
-                    <input
-                      type='date'
-                      name='DateofBirth'
-                      className='form-control'
-                      placeholder='Date of Birth'
-                      max={moment().format('YYYY-MM-DD')}
-                      onChange={onChange}
+                    <Flatpickr
                       value={data.DateofBirth}
+                      className="form-control"
+                      onChange={(date: Date[]) => {
+                        setData({
+                          ...data,
+                          DateofBirth: dateFormatChange(date[0]),
+                        });
+                      }}
+                      options={{
+                        dateFormat: "Y-m-d",
+                        maxDate: "today",
+                        disableMobile: true,
+                      }}
                     />
                   </div>
                 </div>
 
-                <div className='row my-2'>
-                  <div className='col'>
-                    <label htmlFor='aboutme'>
+                <div className="row my-2">
+                  <div className="col">
+                    <label htmlFor="aboutme">
                       <b>
-                        About<span className='text-danger'>*</span>
+                        About<span className="text-danger">*</span>
                       </b>
                     </label>
                     <textarea
-                      className='form-control text-area'
-                      name='aboutme'
-                      placeholder='About me'
+                      className="form-control text-area"
+                      name="aboutme"
+                      placeholder="About me"
                       value={data.aboutme}
                       onChange={onChangeAbout}
                       required
                       maxLength={300}
                     ></textarea>
                   </div>
-                  <div className='col'>
+                  <div className="col">
                     <div>
-                      <label className ='image-label' htmlFor='image'>
+                      <label className="image-label" htmlFor="image">
                         <b>Profile Picture</b>
-                      </label>{' '}
+                      </label>{" "}
                     </div>
-                    <div className = 'input-image'>
+                    <div className="input-image">
                       <input
-                        type='file'
-                        name='image'
-                        className='form-control-file'
+                        type="file"
+                        name="image"
+                        className="form-control-file"
                         onChange={handleImageChange}
                       />
-                      {typeof data.image === 'string' &&
-                      data.image.includes('google') ? (
+                      {typeof data.image === "string" &&
+                      data.image.includes("google") ? (
                         <img
-                        className='update-form-image'
+                          className="update-form-image"
                           src={data.image as string}
-                          alt='ProfilePic'
+                          alt="ProfilePic"
                         />
                       ) : (
                         data.image && (
                           <img
-                            className='update-form-image'
+                            className="update-form-image"
                             src={`${process.env.REACT_APP_API_URL}/uploads/${data.image}`}
-                            alt='ProfilePic'
+                            alt="ProfilePic"
                           />
                         )
                       )}
                     </div>
                   </div>
                 </div>
-                <button className='btn btn-primary my-3' type='submit'>
+                <button className="btn btn-primary my-3" type="submit">
                   Submit
                 </button>
               </form>
@@ -314,8 +321,8 @@ const Updateform = (props: iProps) => {
         </>
       ) : (
         <>
-          {props.showAlert('Please Login to continue', 'warning')}
-          {Navigate('/')}
+          {props.showAlert("Please Login to continue", "warning")}
+          {Navigate("/")}
         </>
       )}
     </>
