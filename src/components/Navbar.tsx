@@ -26,8 +26,8 @@ const Navbar = () => {
     );
 
     let temp: IProfilePic = await response.json();
-    setData(temp!);
-    setProfilePic(temp!.image);
+    temp && setData(temp!);
+    temp && setProfilePic(temp!.image);
   };
 
   // Function to logout user

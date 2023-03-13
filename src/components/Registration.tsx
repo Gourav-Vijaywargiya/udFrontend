@@ -12,7 +12,7 @@ const Registration = (props: iProps) => {
   const [profile, setProfile] = useState<IUserProfile | null>(
     JSON.parse(localStorage.getItem("userprofile") as string)
   );
-  const [mobile, setMobile] = useState<string>();
+  const [mobile, setMobile] = useState<string>("");
   const [gender, setGender] = useState<string>("");
   const [dob, setDob] = useState<string>("");
   const [aboutme, setAboutMe] = useState<string>("");
@@ -78,6 +78,7 @@ const Registration = (props: iProps) => {
           <input
             type="tel"
             name="mobile"
+            placeholder = "Enter mobile number"
             value={mobile!}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setMobile(e.target.value.replace(/[^\d+]/g, ""))
@@ -96,6 +97,7 @@ const Registration = (props: iProps) => {
           </label>
           <Flatpickr
             value={dob}
+            placeholder="Enter date of birth"
             className="form-details"
             onChange={(date: Date[]) =>{
               setDob(dateFormatChange(date[0]));
@@ -139,6 +141,7 @@ const Registration = (props: iProps) => {
           <textarea
             name="aboutme"
             value={aboutme}
+            placeholder="enter about yourself"
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
               setAboutMe((e.target as HTMLTextAreaElement).value)
             }
