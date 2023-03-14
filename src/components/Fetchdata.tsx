@@ -195,7 +195,7 @@ const Fetchdata = (props: iProps) => {
                           <td>{item.Mobile}</td>
                           <td>{item.Gender}</td>
                           <td>
-                            {moment(item.DateofBirth).format('DD-MM-YYYY')}
+                            {moment(new Date(item.DateofBirth)).format('DD-MM-YYYY')}
                           </td>
                           <td>{item.aboutme}</td>
                         </tr>
